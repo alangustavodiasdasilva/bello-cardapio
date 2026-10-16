@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Painel • Bello Bebidas</title>
+<style>
+:root{--y:#f6ba04;--g:#009933;--gd:#006e26;--ink:#141414;--bg:#fff8dc;--line:rgba(0,0,0,.14);--red:#d93a3a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,select,textarea{font:inherit;color:var(--ink);width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--g)}
+textarea{resize:vertical;min-height:70px}
+label{display:block;font-size:12px;font-weight:700;margin:12px 0 4px;opacity:.8}
+header{background:var(--y);padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+header h1{font-size:19px;flex:1}
+.badge{font-size:12px;font-weight:800;padding:5px 11px;border-radius:99px;background:rgba(0,0,0,.14)}
+.badge.ok{background:var(--g);color:#fff}.badge.bad{background:var(--red);color:#fff}
+nav{display:flex;gap:4px;padding:10px 12px 0;overflow-x:auto;border-bottom:1px solid var(--line);background:#fff}
+nav button{padding:10px 14px;font-weight:800;font-size:14px;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{border-color:var(--g);color:var(--gd)}
+main{max-width:860px;margin:0 auto;padding:14px 12px 120px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.bar select,.bar input{flex:1;min-width:140px;width:auto}
+.btn{padding:10px 14px;border-radius:10px;font-weight:800;font-size:14px;background:#fff;border:1.5px solid var(--line)}
+.btn.p{background:var(--g);color:#fff;border-color:var(--g)}
+.btn.y{background:var(--y);border-color:var(--y)}
+.btn.d{color:var(--red)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.sec{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--gd);margin:18px 2px 6px}
+.card{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:8px}
+.th{width:62px;height:62px;border-radius:10px;overflow:hidden;background:#222 center/cover;flex:none;display:grid;place-items:center;color:#fff;font-size:11px}
+.th img,.th video{width:100%;height:100%;object-fit:cover}
+.card .ti{flex:1;min-width:0}
+.card .ti b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .ti span{font-size:12px;opacity:.7}
+.card .ac{display:flex;gap:2px}
+.ic{width:34px;height:34px;border-radius:9px;font-size:15px;font-weight:800;background:#f4efd8}
+.ic:disabled{opacity:.3}
+.pill{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--y);margin-left:6px}
+.box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.box h3{font-size:16px;margin-bottom:4px}
+.hint{font-size:12.5px;line-height:1.5;opacity:.8}
+.hint a{color:var(--gd);font-weight:800}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+/* editor */
+#ed{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;display:none;align-items:flex-end;justify-content:center}
+#ed.open{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:760px;max-height:94vh;border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden}
+.sheet .hd{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);background:#fff}
+.sheet .hd b{flex:1;font-size:17px}
+.sheet .bd{padding:4px 16px 16px;overflow:auto;flex:1}
+.sheet .ft{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);background:#fff}
+.sheet .ft .btn{flex:1}
+.mrow{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px;margin-bottom:6px}
+.mrow .th{width:54px;height:54px}
+.mrow .mi{flex:1;min-width:0;display:grid;gap:4px}
+.mrow input,.mrow select{padding:6px 8px;font-size:12.5px}
+.mrow .mb{display:flex;flex-direction:column;gap:2px}
+.mrow .mb .ic{width:30px;height:26px;font-size:12px}
+.addm{display:flex;gap:6px;margin-top:6px}
+.addm input{flex:1}
+.irow{display:grid;grid-template-columns:1.4fr 1.6fr 90px 34px;gap:6px;margin-bottom:6px}
+.irow input{padding:8px}
+@media(max-width:520px){.irow{grid-template-columns:1fr 1fr}.irow input:nth-child(2){grid-column:1/3}}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--y);padding:11px 18px;border-radius:99px;font-weight:800;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:92vw;text-align:center}
+#toast.on{opacity:1}
+#toast.err{background:var(--red);color:#fff}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px;display:flex;gap:8px;justify-content:center;z-index:30}
+.savebar .btn{max-width:260px;flex:1}
+section[hidden]{display:none}
+</style>
+</head>
+<body>
+<header><h1>Painel do Bello</h1><span class="badge" id="st">Carregando…</span></header>
+<nav id="nav">
+  <button data-t="prod" class="on">Produtos</button>
+  <button data-t="loja">Dados da loja</button>
+  <button data-t="con">Conexão GitHub</button>
+  <button data-t="ajuda">Ajuda</button>
+</nav>
+
+<main>
+  <!-- PRODUTOS -->
+  <section id="t-prod">
+    <div class="bar">
+      <select id="fCat"></select>
+      <input id="fQ" type="search" placeholder="Buscar produto…">
+    </div>
+    <div class="bar">
+      <button class="btn y" id="bNovo">+ Produto</button>
+      <button class="btn" id="bGrupo">+ Lista de itens</button>
+      <button class="btn" id="bIntro">+ Tela de foto</button>
+      <a class="btn" href="../index.html" target="_blank" style="text-decoration:none">Ver o site</a>
+    </div>
+    <div id="lista"></div>
+  </section>
+
+  <!-- DADOS DA LOJA -->
+  <section id="t-loja" hidden>
+    <div class="box">
+      <h3>Dados da loja</h3>
+      <p class="hint">Aparecem na tela de entrada do cardápio.</p>
+      <div class="grid2">
+        <div><label>Nome</label><input id="n_nome"></div>
+        <div><label>Frase da entrada</label><input id="n_slogan"></div>
+        <div><label>WhatsApp (com 55 + DDD)</label><input id="n_whatsapp" placeholder="5566999999999"></div>
+        <div><label>Telefone para exibir</label><input id="n_telefone"></div>
+        <div><label>Nota no Google</label><input id="n_nota"></div>
+        <div><label>Endereço</label><input id="n_endereco"></div>
+      </div>
+      <label>Link para avaliar no Google</label><input id="n_avaliacao">
+      <label>Link do mapa (Como chegar)</label><input id="n_mapa">
+      <label>Instagram</label><input id="n_instagram">
+      <label>Etiquetas da entrada (separe por vírgula)</label><input id="n_chips" placeholder="Abre às 16h, Delivery">
+      <label>Fotos que passam na entrada (um caminho ou link por linha)</label><textarea id="n_fotos" rows="4"></textarea>
+      <div class="addm"><label class="btn" style="margin:0;display:inline-block">Enviar foto<input id="n_up" type="file" accept="image/*" multiple hidden></label></div>
+    </div>
+    <div class="box">
+      <h3>Categorias</h3>
+      <p class="hint">As bolinhas do topo do cardápio. A capa é a foto da bolinha.</p>
+      <div id="catEd"></div>
+      <button class="btn" id="bNovaCat" style="margin-top:6px">+ Nova categoria</button>
+    </div>
+  </section>
+
+  <!-- CONEXÃO -->
+  <section id="t-con" hidden>
+    <div class="box">
+      <h3>Conectar ao GitHub</h3>
+      <p class="hint">Para o painel salvar suas alterações direto no site. O token fica só neste navegador.</p>
+      <label>Repositório (dono/nome)</label><input id="c_repo">
+      <label>Branch</label><input id="c_branch">
+      <label>Token de acesso</label><input id="c_token" type="password" autocomplete="off" placeholder="github_pat_…">
+      <div class="bar" style="margin-top:12px"><button class="btn p" id="bConectar">Conectar</button><button class="btn d" id="bSair">Desconectar</button></div>
+      <p class="hint" style="margin-top:8px">Como criar o token: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">github.com/settings/personal-access-tokens/new</a> → escolha só este repositório → em <b>Permissions</b>, marque <b>Contents: Read and write</b> → Generate token → cole acima.</p>
+    </div>
+  </section>
+
+  <!-- AJUDA -->
+  <section id="t-ajuda" hidden>
+    <div class="box"><h3>Como usar</h3>
+      <p class="hint"><b>1.</b> Conecte ao GitHub na aba <i>Conexão GitHub</i> (só uma vez).<br>
+      <b>2.</b> Em <i>Produtos</i>, toque em <b>+ Produto</b>, preencha nome, descrição e preço, e adicione fotos e vídeos (link ou arquivo do computador).<br>
+      <b>3.</b> Toque em <b>Salvar no GitHub</b>. O site atualiza sozinho em cerca de 1 minuto.<br><br>
+      <b>Fotos e vídeos:</b> a primeira da lista aparece primeiro; o cliente passa para o lado para ver as outras. Vídeo toca sozinho, sem som. Prefira vídeo curto (até 20 MB) em formato MP4.<br>
+      <b>Modo da foto:</b> <i>Automático</i> deixa a foto em tela cheia. Use <i>Produto (fundo branco)</i> para garrafa ou lata com fundo branco; ele vira um fundo amarelo e verde. <i>Inteira</i> mostra a foto sem cortar.<br>
+      <b>Lista de itens:</b> serve para vários itens numa tela só (ex.: sabores de pastel).<br>
+      <b>Sem conexão:</b> dá para editar e usar <b>Baixar cardapio.js</b>, mas só o GitHub guarda de verdade.</p>
+    </div>
+  </section>
+</main>
+
+<div class="savebar">
+  <button class="btn" id="bBaixar">Baixar cardapio.js</button>
+  <button class="btn p" id="bSalvar" disabled>Salvar no GitHub</button>
+</div>
+
+<div id="ed"><div class="sheet"><div class="hd"><b id="edT"></b><button class="ic" id="edX">✕</button></div><div class="bd" id="edB"></div><div class="ft"><button class="btn" id="edC">Cancelar</button><button class="btn p" id="edS">Concluir</button></div></div></div>
+<div id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CFGK="bello_admin_cfg";
+let CFG={};try{CFG=JSON.parse(localStorage.getItem(CFGK)||"{}")}catch(e){}
+CFG.repo=CFG.repo||"alangustavodiasdasilva/bello-cardapio";CFG.branch=CFG.branch||"main";
+let DATA=null,dirty=false,connected=false;const pending={};   // caminho -> {b64,mime,url}
+const TIPO={item:"Produto",grupo:"Lista de itens",intro:"Tela de foto"};
+
+/* ---------- utilidades ---------- */
+function toast(t,err){const e=$("#toast");e.textContent=t;e.className="on"+(err?" err":"");clearTimeout(toast.t);toast.t=setTimeout(()=>e.className="",err?5200:2600)}
+function setDirty(v){dirty=v;$("#bSalvar").disabled=!(v&&connected)}
+function status(){const s=$("#st");if(connected){s.textContent="GitHub conectado";s.className="badge ok"}else{s.textContent="Modo local (sem salvar)";s.className="badge bad"}$("#bSalvar").disabled=!(dirty&&connected)}
+const parseJS=t=>JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1));
+const dataText=()=>"/* Dados do cardápio. Edite pelo painel (/admin) ou direto aqui. */\nwindow.CARDAPIO = "+JSON.stringify(DATA,null,1)+";\n";
+const utf8b64=s=>btoa(unescape(encodeURIComponent(s)));
+const slug=s=>String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"item";
+const isVid=s=>/\.(mp4|webm|mov)(\?|$)/i.test(s||"");
+function prev(src){if(pending[src])return pending[src].url;if(/^(https?:|blob:|data:)/.test(src))return src;return "../"+src}
+const mSrc=m=>typeof m==="string"?m:(m.src||"");
+function thumb(m){if(!m)return `<div class="th">sem foto</div>`;const s=mSrc(m),u=prev(s);return `<div class="th">${isVid(s)?`<video src="${esc(u)}" muted preload="metadata"></video>`:`<img src="${esc(u)}" alt="">`}</div>`}
+
+/* ---------- GitHub ---------- */
+const gh=(p,o={})=>fetch(`https://api.github.com/repos/${CFG.repo}/${p}`,Object.assign({},o,{headers:Object.assign({Authorization:"Bearer "+CFG.token,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},o.headers||{})}));
+async function putFile(path,b64,msg){
+ let sha;const g=await gh(`contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(CFG.branch)}`);if(g.ok)sha=(await g.json()).sha;
+ const r=await gh(`contents/${path.split("/").map(encodeURIComponent).join("/")}`,{method:"PUT",body:JSON.stringify({message:msg,content:b64,branch:CFG.branch,sha})});
+ if(!r.ok){let m=r.status;try{m=(await r.json()).message||m}catch(e){}throw new Error("GitHub: "+m)}
+ return r.json();
+}
+async function conectar(silencioso){
+ if(!CFG.token){connected=false;status();return false}
+ try{const r=await gh("");const j=await r.json();
+  if(!r.ok)throw new Error(j.message||r.status);
+  if(j.permissions&&!j.permissions.push)throw new Error("o token não tem permissão de escrita");
+  connected=true;status();return true}
+ catch(e){connected=false;status();if(!silencioso)toast("Não conectou: "+e.message,true);return false}
+}
+async function carregar(){
+ let txt;
+ if(CFG.token&&await conectar(true)){
+  const r=await gh(`contents/data/cardapio.js?ref=${encodeURIComponent(CFG.branch)}`,{headers:{Accept:"application/vnd.github.raw+json"}});
+  if(r.ok)txt=await r.text();
+ }
+ if(!txt){const r=await fetch("../data/cardapio.js?"+Date.now());txt=await r.text()}
+ DATA=parseJS(txt);status();renderAll();
+}
+async function salvar(){
+ if(!connected){toast("Conecte ao GitHub primeiro",true);return}
+ const b=$("#bSalvar");b.disabled=true;b.textContent="Salvando…";
+ try{
+  const paths=Object.keys(pending).filter(p=>{try{return JSON.stringify(DATA).includes(p)}catch(e){return false}});
+  for(let i=0;i<paths.length;i++){b.textContent=`Enviando arquivos ${i+1}/${paths.length}…`;await putFile(paths[i],pending[paths[i]].b64,"Painel: adiciona "+paths[i].split("/").pop())}
+  b.textContent="Salvando cardápio…";
+  await putFile("data/cardapio.js",utf8b64(dataText()),"Painel: atualiza o cardápio");
+  paths.forEach(p=>{DATA=JSON.parse(JSON.stringify(DATA));delete pending[p]});
+  setDirty(false);toast("Salvo! O site atualiza em cerca de 1 minuto.");
+ }catch(e){toast(e.message,true);setDirty(true)}
+ b.textContent="Salvar no GitHub";b.disabled=!(dirty&&connected);
+}
+
+/* ---------- lista ---------- */
+function catName(id){const c=(DATA.categorias||[]).find(c=>c.id===id);return c?c.nome:id}
+function renderFiltro(){const v=$("#fCat").value;$("#fCat").innerHTML=`<option value="">Todas as categorias</option>`+DATA.categorias.map(c=>`<option value="${esc(c.id)}">${esc(c.nome)}</option>`).join("");$("#fCat").value=v}
+function renderLista(){
+ const cat=$("#fCat").value,q=$("#fQ").value.trim().toLowerCase();let last=null,html="";
+ DATA.telas.forEach((t,i)=>{
+  if(cat&&t.categoria!==cat)return;
+  const nome=t.nome||t.titulo||"";
+  const hay=(nome+" "+(t.descricao||"")+" "+(t.itens||[]).map(x=>x.nome).join(" ")).toLowerCase();
+  if(q&&!hay.includes(q))return;
+  if(t.categoria!==last){last=t.categoria;html+=`<div class="sec">${esc(catName(t.categoria))}</div>`}
+  const info=t.tipo==="item"?((+t.preco>0?"R$ "+(+t.preco).toFixed(2).replace(".",","):"sem preço")+" • "+esc(t.secao||"")):t.tipo==="grupo"?((t.itens||[]).length+" itens"):"tela de foto";
+  html+=`<div class="card" data-i="${i}">${thumb((t.midia||[])[0])}<div class="ti"><b>${esc(nome)||"(sem nome)"}${t.tag?`<span class="pill">${esc(t.tag)}</span>`:""}</b><span>${TIPO[t.tipo]} • ${info} • ${(t.midia||[]).length} mídia(s)</span></div>
+   <div class="ac"><button class="ic" data-a="up" title="Subir">↑</button><button class="ic" data-a="dn" title="Descer">↓</button><button class="ic" data-a="ed" title="Editar">✎</button><button class="ic" data-a="rm" title="Apagar">✕</button></div></div>`;
+ });
+ $("#lista").innerHTML=html||`<p class="hint" style="padding:20px;text-align:center">Nada encontrado.</p>`;
+}
+function renderAll(){renderFiltro();renderLista();renderLoja()}
+function mover(i,dir){const c=DATA.telas[i].categoria;let j=i+dir;while(j>=0&&j<DATA.telas.length&&DATA.telas[j].categoria!==c)j+=dir;if(j<0||j>=DATA.telas.length)return;[DATA.telas[i],DATA.telas[j]]=[DATA.telas[j],DATA.telas[i]];setDirty(true);renderLista()}
+
+/* ---------- editor ---------- */
+let ED=null;
+const copy=o=>JSON.parse(JSON.stringify(o));
+function novo(tipo){
+ const cat=$("#fCat").value||DATA.categorias[0].id;
+ const base={item:{tipo:"item",categoria:cat,secao:"",nome:"",descricao:"",preco:0,tag:"",midia:[]},grupo:{tipo:"grupo",categoria:cat,titulo:"",nota:"",midia:[],itens:[{nome:"",descricao:"",preco:0}]},intro:{tipo:"intro",categoria:cat,titulo:"",descricao:"",midia:[]}}[tipo];
+ if(tipo==="item"){const ult=[...DATA.telas].reverse().find(t=>t.categoria===cat&&t.tipo==="item");if(ult)base.secao=ult.secao||""}
+ openEd(-1,base);
+}
+function openEd(i,t){ED={i,t:copy(t)};ED.t.midia=(ED.t.midia||[]).map(m=>typeof m==="string"?{src:m}:m);drawEd();$("#ed").classList.add("open")}
+function drawEd(){
+ const t=ED.t;$("#edT").textContent=(ED.i<0?"Novo: ":"Editar: ")+TIPO[t.tipo];
+ let h=`<label>Categoria</label><select id="e_cat">${DATA.categorias.map(c=>`<option value="${esc(c.id)}" ${c.id===t.categoria?"selected":""}>${esc(c.nome)}</option>`).join("")}</select>`;
+ if(t.tipo==="item")h+=`<div class="grid2"><div><label>Nome do produto</label><input id="e_nome" value="${esc(t.nome)}"></div><div><label>Seção (ex.: Long Neck, Doses)</label><input id="e_secao" value="${esc(t.secao)}"></div></div>
+  <label>Descrição</label><textarea id="e_desc">${esc(t.descricao)}</textarea>
+  <div class="grid2"><div><label>Preço (R$) — deixe 0 para não mostrar</label><input id="e_preco" inputmode="decimal" value="${esc(t.preco)}"></div><div><label>Etiqueta (ex.: NOVO, TOP)</label><input id="e_tag" value="${esc(t.tag)}"></div></div>`;
+ if(t.tipo==="intro")h+=`<label>Título</label><input id="e_tit" value="${esc(t.titulo)}"><label>Texto</label><textarea id="e_desc">${esc(t.descricao)}</textarea>`;
+ if(t.tipo==="grupo")h+=`<label>Título da lista</label><input id="e_tit" value="${esc(t.titulo)}"><label>Observação (aparece no fim)</label><input id="e_nota" value="${esc(t.nota)}">
+  <label>Itens</label><div id="e_itens">${t.itens.map((x,k)=>`<div class="irow" data-k="${k}"><input placeholder="Nome" value="${esc(x.nome)}"><input placeholder="Descrição" value="${esc(x.descricao||"")}"><input placeholder="Preço" inputmode="decimal" value="${esc(x.preco)}"><button class="ic" data-ir="${k}">✕</button></div>`).join("")}</div><button class="btn" id="e_addi">+ Item</button>`;
+ h+=`<label>Fotos e vídeos (a primeira aparece primeiro)</label><div id="e_mid">${t.midia.map((m,k)=>mrow(m,k)).join("")}</div>
+  <div class="addm"><input id="e_url" placeholder="Cole o link de uma foto ou vídeo (.jpg, .png, .mp4)"><button class="btn" id="e_addu">Adicionar</button></div>
+  <div class="addm"><label class="btn" style="margin:0;display:inline-block">Enviar do computador<input id="e_up" type="file" accept="image/*,video/*" multiple hidden></label></div>
+  <p class="hint" style="margin-top:6px">Foto ou vídeo da internet: use só o que você tem direito de usar.</p>`;
+ $("#edB").innerHTML=h;
+}
+function mrow(m,k){const s=m.src||"",v=isVid(s);return `<div class="mrow" data-k="${k}">${thumb(m)}<div class="mi"><input value="${esc(s)}" data-f="src">${v?`<input value="${esc(m.poster||"")}" data-f="poster" placeholder="Capa do vídeo (opcional)">`:`<select data-f="modo"><option value="">Modo: automático</option><option value="cover" ${m.modo==="cover"?"selected":""}>Foto cheia</option><option value="pk" ${m.modo==="pk"?"selected":""}>Produto (fundo branco)</option><option value="contain" ${m.modo==="contain"?"selected":""}>Inteira (sem cortar)</option></select>`}</div><div class="mb"><button class="ic" data-mm="${k}" data-d="-1">◀</button><button class="ic" data-mm="${k}" data-d="1">▶</button><button class="ic" data-mr="${k}">✕</button></div></div>`}
+function lerEd(){ // coleta campos antes de redesenhar/salvar
+ const t=ED.t,g=id=>{const e=$("#"+id);return e?e.value:""};
+ t.categoria=g("e_cat")||t.categoria;
+ if(t.tipo==="item"){t.nome=g("e_nome").trim();t.secao=g("e_secao").trim();t.descricao=g("e_desc").trim();t.preco=parseFloat(String(g("e_preco")).replace(",","."))||0;t.tag=g("e_tag").trim()}
+ if(t.tipo==="intro"){t.titulo=g("e_tit").trim();t.descricao=g("e_desc").trim()}
+ if(t.tipo==="grupo"){t.titulo=g("e_tit").trim();t.nota=g("e_nota").trim();t.itens=$$("#e_itens .irow").map(r=>{const [a,b,c]=r.querySelectorAll("input");return{nome:a.value.trim(),descricao:b.value.trim(),preco:parseFloat(String(c.value).replace(",","."))||0}})}
+ $$("#e_mid .mrow").forEach(r=>{const k=+r.dataset.k,m=t.midia[k];r.querySelectorAll("[data-f]").forEach(el=>{const f=el.dataset.f;if(el.value)m[f]=el.value;else delete m[f]})});
+}
+function addMidia(src,extra){lerEd();ED.t.midia.push(Object.assign({src},extra||{}));drawEd()}
+async function enviar(files){
+ if(!connected){toast("Conecte ao GitHub para enviar arquivos. Ou cole o link.",true);return}
+ for(const f of files){
+  try{
+   const isV=f.type.startsWith("video/");if(isV&&f.size>40e6){toast(`"${f.name}" é grande demais (máx. 40 MB)`,true);continue}
+   let b64,mime=f.type,ext=(f.name.split(".").pop()||"").toLowerCase();
+   if(isV){b64=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(",")[1]);fr.readAsDataURL(f)})}
+   else{const bmp=await createImageBitmap(f),sc=Math.min(1,1400/Math.max(bmp.width,bmp.height)),cv=document.createElement("canvas");cv.width=Math.round(bmp.width*sc);cv.height=Math.round(bmp.height*sc);cv.getContext("2d").drawImage(bmp,0,0,cv.width,cv.height);
+    const url=cv.toDataURL("image/jpeg",.85);b64=url.split(",")[1];mime="image/jpeg";ext="jpg"}
+   const path=`img/uploads/${Date.now()}-${slug(f.name.replace(/\.[^.]+$/,""))}.${ext||"jpg"}`;
+   const blob=new Blob([Uint8Array.from(atob(b64),c=>c.charCodeAt(0))],{type:mime});
+   pending[path]={b64,mime,url:URL.createObjectURL(blob)};
+   if(ED.t._fotos){ED.t._fotos.push(path)}else addMidia(path);
+  }catch(e){toast("Falhou ao ler "+f.name,true)}
+ }
+}
+function concluir(){
+ lerEd();const t=ED.t;
+ const nome=t.nome||t.titulo;if(!nome){toast("Preencha o nome",true);return}
+ t.midia=t.midia.filter(m=>m.src).map(m=>{const o={src:m.src.trim()};if(m.modo)o.modo=m.modo;if(m.poster)o.poster=m.poster.trim();return Object.keys(o).length===1?o.src:o});
+ if(t.tipo==="item"&&!(t.preco>0))t.preco=0;
+ if(ED.i<0){// insere ao fim da categoria
+  let pos=-1;DATA.telas.forEach((x,i)=>{if(x.categoria===t.categoria)pos=i});
+  if(pos<0)DATA.telas.push(t);else DATA.telas.splice(pos+1,0,t);
+ }else DATA.telas[ED.i]=t;
+ $("#ed").classList.remove("open");setDirty(true);renderLista();toast("Alteração pronta. Toque em Salvar no GitHub.");
+}
+
+/* ---------- dados da loja ---------- */
+function renderLoja(){
+ const n=DATA.negocio||{};
+ ["nome","slogan","whatsapp","telefone","nota","endereco","avaliacao","mapa","instagram"].forEach(k=>{$("#n_"+k).value=n[k]||""});
+ $("#n_chips").value=(n.chips||[]).join(", ");$("#n_fotos").value=(n.fotosEntrada||[]).join("\n");
+ $("#catEd").innerHTML=DATA.categorias.map((c,k)=>`<div class="irow" style="grid-template-columns:1fr 1.4fr 34px" data-k="${k}"><input value="${esc(c.nome)}" placeholder="Nome"><input value="${esc(c.capa||"")}" placeholder="Capa (caminho ou link)"><button class="ic" data-cr="${k}" title="Apagar">✕</button></div>`).join("");
+}
+function lerLoja(){
+ const n=DATA.negocio=DATA.negocio||{};
+ ["nome","slogan","whatsapp","telefone","nota","endereco","avaliacao","mapa","instagram"].forEach(k=>{n[k]=$("#n_"+k).value.trim()});
+ n.chips=$("#n_chips").value.split(",").map(s=>s.trim()).filter(Boolean);
+ n.fotosEntrada=$("#n_fotos").value.split("\n").map(s=>s.trim()).filter(Boolean);
+ $$("#catEd .irow").forEach(r=>{const k=+r.dataset.k,[a,b]=r.querySelectorAll("input");DATA.categorias[k].nome=a.value.trim();DATA.categorias[k].capa=b.value.trim()});
+}
+
+/* ---------- eventos ---------- */
+$("#nav").onclick=e=>{const b=e.target.closest("[data-t]");if(!b)return;$$("#nav button").forEach(x=>x.classList.toggle("on",x===b));["prod","loja","con","ajuda"].forEach(t=>$("#t-"+t).hidden=t!==b.dataset.t)};
+$("#fCat").onchange=renderLista;$("#fQ").oninput=renderLista;
+$("#bNovo").onclick=()=>novo("item");$("#bGrupo").onclick=()=>novo("grupo");$("#bIntro").onclick=()=>novo("intro");
+$("#lista").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;const i=+b.closest(".card").dataset.i,a=b.dataset.a;
+ if(a==="up")mover(i,-1);if(a==="dn")mover(i,1);if(a==="ed")openEd(i,DATA.telas[i]);
+ if(a==="rm"&&confirm(`Apagar "${DATA.telas[i].nome||DATA.telas[i].titulo}"?`)){DATA.telas.splice(i,1);setDirty(true);renderLista()}};
+$("#edX").onclick=$("#edC").onclick=()=>$("#ed").classList.remove("open");
+$("#edS").onclick=concluir;
+$("#edB").onclick=e=>{const t=e.target;
+ if(t.id==="e_addi"){lerEd();ED.t.itens.push({nome:"",descricao:"",preco:0});drawEd()}
+ const ir=t.closest("[data-ir]");if(ir){lerEd();ED.t.itens.splice(+ir.dataset.ir,1);drawEd()}
+ if(t.id==="e_addu"){const u=$("#e_url").value.trim();if(u)addMidia(u)}
+ const mr=t.closest("[data-mr]");if(mr){lerEd();ED.t.midia.splice(+mr.dataset.mr,1);drawEd()}
+ const mm=t.closest("[data-mm]");if(mm){lerEd();const k=+mm.dataset.mm,d=+mm.dataset.d,a=ED.t.midia;if(k+d>=0&&k+d<a.length){[a[k],a[k+d]]=[a[k+d],a[k]];drawEd()}}};
+$("#edB").onchange=async e=>{if(e.target.id==="e_up"){lerEd();await enviar([...e.target.files]);drawEd()}};
+$("#n_up").onchange=async e=>{ED={t:{_fotos:[]}};await enviar([...e.target.files]);const add=ED.t._fotos;if(add.length){$("#n_fotos").value=($("#n_fotos").value.trim()+"\n"+add.join("\n")).trim()}e.target.value="";setDirty(true)};
+$("#t-loja").oninput=()=>{lerLoja();setDirty(true)};
+$("#bNovaCat").onclick=()=>{lerLoja();const nome=prompt("Nome da nova categoria:");if(!nome)return;let id=slug(nome),n=2;while(DATA.categorias.some(c=>c.id===id))id=slug(nome)+n++;DATA.categorias.push({id,nome,capa:""});setDirty(true);renderAll()};
+$("#catEd").onclick=e=>{const b=e.target.closest("[data-cr]");if(!b)return;const k=+b.dataset.cr,c=DATA.categorias[k];if(DATA.telas.some(t=>t.categoria===c.id)){toast("Essa categoria ainda tem produtos. Mova ou apague antes.",true);return}if(confirm("Apagar a categoria "+c.nome+"?")){DATA.categorias.splice(k,1);setDirty(true);renderAll()}};
+$("#bSalvar").onclick=()=>{lerLoja();salvar()};
+$("#bBaixar").onclick=()=>{lerLoja();const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([dataText()],{type:"text/javascript"}));a.download="cardapio.js";a.click()};
+$("#bConectar").onclick=async()=>{CFG.repo=$("#c_repo").value.trim();CFG.branch=$("#c_branch").value.trim()||"main";CFG.token=$("#c_token").value.trim();localStorage.setItem(CFGK,JSON.stringify(CFG));
+ if(await conectar()){toast("Conectado!");const r=await gh(`contents/data/cardapio.js?ref=${encodeURIComponent(CFG.branch)}`,{headers:{Accept:"application/vnd.github.raw+json"}});if(r.ok&&!dirty){DATA=parseJS(await r.text());renderAll()}}};
+$("#bSair").onclick=()=>{CFG.token="";localStorage.setItem(CFGK,JSON.stringify(CFG));$("#c_token").value="";connected=false;status();toast("Desconectado")};
+$("#c_repo").value=CFG.repo;$("#c_branch").value=CFG.branch;$("#c_token").value=CFG.token||"";
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+carregar().catch(e=>{$("#lista").innerHTML=`<p class="hint" style="padding:20px">Não consegui carregar os dados: ${esc(e.message)}</p>`;$("#st").textContent="Erro"});
+</script>
+</body>
+</html>
